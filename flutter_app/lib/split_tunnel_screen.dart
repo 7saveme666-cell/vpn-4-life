@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 // Match the app's dark background and surface palette.
 const _splitBg = Color(0xFF05050A);
 const _splitCard = Color(0xFF100D18);
-const _splitYellow = Color(0xFFF4E51E);
 
 /// Demo split-tunneling settings UI. Changes are local to this screen and do
 /// not configure a real VPN tunnel or installed applications.
 class SplitTunnelScreen extends StatefulWidget {
-  const SplitTunnelScreen({super.key});
+  const SplitTunnelScreen({super.key, required this.accent});
+
+  final Color accent;
 
   @override
   State<SplitTunnelScreen> createState() => _SplitTunnelScreenState();
@@ -33,7 +34,7 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
               ListTile(
                 title: Text(mode, style: const TextStyle(color: Colors.white)),
                 trailing: mode == _routingMode
-                    ? const Icon(Icons.check, color: _splitYellow)
+                    ? Icon(Icons.check, color: widget.accent)
                     : null,
                 onTap: () => Navigator.pop(context, mode),
               ),
@@ -72,9 +73,12 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
             child: const Text('Отмена'),
           ),
           FilledButton(
-            style: FilledButton.styleFrom(backgroundColor: _splitYellow),
+            style: FilledButton.styleFrom(
+              backgroundColor: widget.accent,
+              foregroundColor: Colors.black,
+            ),
             onPressed: () => Navigator.pop(context, controller.text.trim()),
-            child: const Text('Добавить', style: TextStyle(color: Colors.black)),
+            child: const Text('Добавить'),
           ),
         ],
       ),
@@ -117,7 +121,7 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
                     padding: const EdgeInsets.only(right: 12),
                     child: Switch(
                       value: _enabled,
-                      activeTrackColor: _splitYellow,
+                      activeTrackColor: widget.accent,
                       activeThumbColor: Colors.white,
                       inactiveThumbColor: Colors.white70,
                       inactiveTrackColor: Colors.white24,
@@ -222,10 +226,10 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 6),
               child: SizedBox(
                 width: double.infinity,
-                height: 40,
+                height: 36,
                 child: FilledButton(
                   style: FilledButton.styleFrom(
-                    backgroundColor: _splitYellow,
+                    backgroundColor: widget.accent,
                     foregroundColor: Colors.black,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -234,7 +238,7 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
                   onPressed: _addEntry,
                   child: const Text(
                     'Добавить',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
@@ -270,7 +274,7 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
               height: 3,
               margin: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
-                color: selected ? _splitYellow : Colors.transparent,
+                color: selected ? widget.accent : Colors.transparent,
                 borderRadius: BorderRadius.circular(3),
               ),
             ),
