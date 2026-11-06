@@ -104,7 +104,7 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
                 children: [
                   IconButton(
                     onPressed: () => Navigator.maybePop(context),
-                    icon: const Icon(Icons.arrow_back, color: Colors.white, size: 25),
+                    icon: const Icon(Icons.arrow_back, color: Colors.white, size: 20),
                   ),
                   const Expanded(
                     child: Text(
