@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 
-const _splitBg = Color(0xFF1D1D1D);
-const _splitCard = Color(0xFF292929);
-const _splitYellow = Color(0xFFF4E51E);
+const _splitBg = Color(0xFF1A1A1D);
+const _splitCard = Color(0xFF2C2C2F);
+const _splitYellow = Color(0xFFE9D100);
 
-/// Demo split-tunneling settings screen. It changes local UI state only; it does
-/// not configure an actual VPN tunnel or control installed applications.
 class SplitTunnelScreen extends StatefulWidget {
   const SplitTunnelScreen({super.key});
 
@@ -40,7 +38,9 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
         ),
       ),
     );
-    if (selected != null && mounted) setState(() => _routingMode = selected);
+    if (selected != null && mounted) {
+      setState(() => _routingMode = selected);
+    }
   }
 
   Future<void> _addEntry() async {
@@ -76,171 +76,190 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
         ],
       ),
     );
+
     controller.dispose();
+
     if (value == null || value.isEmpty || !mounted) return;
     setState(() => (_domainsTab ? _domains : _apps).add(value));
   }
 
   @override
-  Widget build(BuildContext context) => Scaffold(
-        backgroundColor: _splitBg,
-        body: SafeArea(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 56,
-                child: Row(
-                  children: [
-                    IconButton(
-                      onPressed: () => Navigator.maybePop(context),
-                      icon: const Icon(Icons.arrow_back, color: Colors.white),
-                    ),
-                    const Expanded(
-                      child: Text(
-                        'Сплит-туннель',
-                        textAlign: TextAlign.center,
-                        style: TextStyle(
-                          color: Colors.white,
-                          fontSize: 20,
-                          fontWeight: FontWeight.w700,
-                        ),
+  Widget build(BuildContext context) {
+    final listItems = _domainsTab ? _domains : _apps;
+
+    return Scaffold(
+      backgroundColor: _splitBg,
+      body: SafeArea(
+        child: Column(
+          children: [
+            SizedBox(
+              height: 56,
+              child: Row(
+                children: [
+                  IconButton(
+                    onPressed: () => Navigator.maybePop(context),
+                    icon: const Icon(Icons.arrow_back, color: Colors.white, size: 30),
+                  ),
+                  const Expanded(
+                    child: Text(
+                      'Сплит-туннель',
+                      textAlign: TextAlign.center,
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 20,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
-                    Switch(
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(right: 12),
+                    child: Switch(
                       value: _enabled,
-                      activeThumbColor: Colors.white,
                       activeTrackColor: _splitYellow,
+                      activeThumbColor: Colors.white,
                       inactiveThumbColor: Colors.white70,
                       inactiveTrackColor: Colors.white24,
                       onChanged: (value) => setState(() => _enabled = value),
                     ),
-                    const SizedBox(width: 8),
-                  ],
-                ),
-              ),
-              const SizedBox(height: 24),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 12),
-                child: Material(
-                  color: const Color(0xFF303030),
-                  borderRadius: BorderRadius.circular(9),
-                  child: InkWell(
-                    onTap: _chooseRoutingMode,
-                    borderRadius: BorderRadius.circular(9),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Column(
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                const Text(
-                                  'Выбранное в списке',
-                                  style: TextStyle(color: Colors.white60, fontSize: 13),
-                                ),
-                                const SizedBox(height: 3),
-                                Text(
-                                  _routingMode,
-                                  style: const TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w600,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const Icon(Icons.chevron_right, color: Colors.white70),
-                        ],
-                      ),
-                    ),
                   ),
-                ),
-              ),
-              const SizedBox(height: 7),
-              Row(
-                children: [
-                  _tabButton('Домены', true),
-                  _tabButton('Приложения', false),
                 ],
               ),
-              const SizedBox(height: 20),
-              Expanded(
-                child: ListView(
-                  padding: const EdgeInsets.symmetric(horizontal: 12),
-                  children: [
-                    for (final entry in _domainsTab ? _domains : _apps)
-                      Container(
-                        margin: const EdgeInsets.only(bottom: 8),
-                        decoration: BoxDecoration(
-                          color: const Color(0xFF242424),
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: ListTile(
-                          title: Text(
-                            entry,
-                            style: const TextStyle(
-                              color: Colors.white,
-                              fontWeight: FontWeight.w600,
-                            ),
+            ),
+            const SizedBox(height: 18),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 12),
+              child: Material(
+                color: const Color(0xFF2E2E31),
+                borderRadius: BorderRadius.circular(12),
+                child: InkWell(
+                  onTap: _chooseRoutingMode,
+                  borderRadius: BorderRadius.circular(12),
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              const Text(
+                                'Выбранное в списке',
+                                style: TextStyle(
+                                  color: Colors.white60,
+                                  fontSize: 13,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                _routingMode,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ],
                           ),
-                          trailing: IconButton(
-                            tooltip: 'Удалить',
-                            onPressed: () => setState(
-                              () => (_domainsTab ? _domains : _apps).remove(entry),
-                            ),
-                            icon: const Icon(Icons.delete, color: Colors.white),
-                          ),
                         ),
-                      ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: const EdgeInsets.fromLTRB(12, 8, 12, 6),
-                child: SizedBox(
-                  width: double.infinity,
-                  height: 40,
-                  child: FilledButton(
-                    style: FilledButton.styleFrom(
-                      backgroundColor: _splitYellow,
-                      foregroundColor: Colors.black,
-                      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+                        const Icon(Icons.chevron_right, color: Colors.white70),
+                      ],
                     ),
-                    onPressed: _addEntry,
-                    child: const Text('Добавить', style: TextStyle(fontWeight: FontWeight.w600)),
                   ),
                 ),
               ),
-            ],
-          ),
+            ),
+            const SizedBox(height: 10),
+            Row(
+              children: [
+                _tabButton('Домены', true),
+                _tabButton('Приложения', false),
+              ],
+            ),
+            const SizedBox(height: 12),
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                children: [
+                  for (final entry in listItems)
+                    Container(
+                      margin: const EdgeInsets.only(bottom: 10),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFF2A2A2D),
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: ListTile(
+                        title: Text(
+                          entry,
+                          style: const TextStyle(
+                            color: Colors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w500,
+                          ),
+                        ),
+                        trailing: IconButton(
+                          onPressed: () => setState(() => listItems.remove(entry)),
+                          icon: const Icon(Icons.delete_outline_rounded, color: Colors.white70),
+                        ),
+                      ),
+                    ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+              child: SizedBox(
+                width: double.infinity,
+                height: 52,
+                child: FilledButton(
+                  style: FilledButton.styleFrom(
+                    backgroundColor: _splitYellow,
+                    foregroundColor: Colors.black,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                  ),
+                  onPressed: _addEntry,
+                  child: const Text(
+                    'Добавить',
+                    style: TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
-      );
+      ),
+    );
+  }
 
   Widget _tabButton(String title, bool domainsTab) {
     final selected = _domainsTab == domainsTab;
+
     return Expanded(
       child: InkWell(
         onTap: () => setState(() => _domainsTab = domainsTab),
         child: Column(
           children: [
             SizedBox(
-              height: 47,
+              height: 42,
               child: Center(
                 child: Text(
                   title,
                   style: TextStyle(
                     color: selected ? Colors.white : Colors.white60,
                     fontSize: 16,
-                    fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
+                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
                   ),
                 ),
               ),
             ),
             Container(
               height: 3,
-              margin: const EdgeInsets.symmetric(horizontal: 16),
+              width: 120,
               decoration: BoxDecoration(
                 color: selected ? _splitYellow : Colors.transparent,
                 borderRadius: BorderRadius.circular(3),
