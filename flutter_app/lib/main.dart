@@ -235,7 +235,7 @@ class _AppHeader extends StatelessWidget {
             icon: Icon(Icons.close_rounded, color: accent, size: 25),
           ),
           const Spacer(),
-          const Text('🕷️', style: TextStyle(fontSize: 20)),
+          Icon(Icons.pets_rounded, color: accent, size: 21),
           const SizedBox(width: 8),
           const Text('Spider VPN', style: TextStyle(color: _text, fontSize: 20, fontWeight: FontWeight.w600)),
           const Spacer(),
@@ -933,12 +933,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
             title: t('Настройки сплит-туннелирования', 'Split tunneling settings'),
             accent: widget.accent,
             onTap: () {
-  Navigator.of(context).push(
-    MaterialPageRoute(
-      builder: (context) => const SplitTunnelScreen(),
-    ),
-  );
-},
+              Navigator.of(context).push(
+                MaterialPageRoute(builder: (_) => const SplitTunnelScreen()),
+              );
+            },
           ),
           const SizedBox(height: 18),
           _SectionTitle(t('Система', 'System')),
@@ -1006,49 +1004,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  t('Демо-профиль: данные локальные.', 'Demo profile: data is local.'),
-                  style: const TextStyle(color: _muted, fontSize: 12),
+                  t('Логин, пароль, Gmail и номер телефона', 'Username, password, Gmail and phone'),
+                  style: const TextStyle(color: _muted),
                 ),
-                const SizedBox(height: 14),
-                _Action(
-                  icon: Icons.person_outline,
-                  title: t('Изменить логин', 'Change username'),
-                  subtitle: _login,
-                  accent: widget.accent,
-                  onTap: () async {
-                    await _changeLogin();
-                    refresh(() {});
-                  },
-                ),
-                const SizedBox(height: 8),
-                _Action(
-                  icon: Icons.lock_outline,
-                  title: t('Изменить пароль', 'Change password'),
-                  subtitle: '••••••••',
-                  accent: widget.accent,
-                  onTap: _changePassword,
-                ),
-                const SizedBox(height: 8),
-                _Action(
-                  icon: Icons.mail_outline,
-                  title: _gmail == null ? t('Привязать Gmail', 'Link Gmail') : 'Gmail',
-                  subtitle: _gmail ?? t('Только @gmail.com', 'Only @gmail.com'),
-                  accent: widget.accent,
-                  onTap: () async {
-                    await _bindGmail();
-                    refresh(() {});
-                  },
-                ),
-                const SizedBox(height: 8),
-                _Action(
-                  icon: Icons.phone_outlined,
-                  title: _phone == null ? t('Привязать номер телефона', 'Link phone number') : t('Номер телефона', 'Phone number'),
-                  subtitle: _phone ?? t('Не привязан', 'Not linked'),
-                  accent: widget.accent,
-                  onTap: () async {
-                    await _bindPhone();
-                    refresh(() {});
-                  },
+                const SizedBox(height: 18),
+                _InfoRow(label: 'Login', value: _login),
+                if (_gmail != null) _InfoRow(label: 'Gmail', value: _gmail!),
+                if (_phone != null) _InfoRow(label: 'Phone', value: _phone!),
+                const SizedBox(height: 18),
+                FilledButton(
+                  style: FilledButton.styleFrom(backgroundColor: widget.accent),
+                  onPressed: () => Navigator.pop(context),
+                  child: Text(t('Закрыть', 'Close')),
                 ),
               ],
             ),
@@ -1059,85 +1026,21 @@ class _ProfileScreenState extends State<ProfileScreen> {
   }
 }
 
-class _PaletteRow extends StatelessWidget {
-  const _PaletteRow({
-    required this.selected,
-    required this.accent,
-    required this.onSelect,
-  });
+class _InfoRow extends StatelessWidget {
+  const _InfoRow({required this.label, required this.value});
 
-  final int selected;
-  final Color accent;
-  final ValueChanged<int> onSelect;
+  final String label;
+  final String value;
 
   @override
-  Widget build(BuildContext context) => Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: List.generate(
-          _paletteOptions.length,
-          (index) => GestureDetector(
-            onTap: () => onSelect(index),
-            child: Container(
-              margin: const EdgeInsets.symmetric(horizontal: 11),
-              width: 34,
-              height: 34,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                gradient: LinearGradient(begin: Alignment.topLeft, end: Alignment.bottomRight, colors: _paletteOptions[index]),
-                border: Border.all(color: selected == index ? _text : Colors.transparent, width: selected == index ? 2.5 : 0),
-                boxShadow: selected == index ? [BoxShadow(color: accent.withOpacity(.32), blurRadius: 10)] : null,
-              ),
-            ),
-          ),
-        ),
-      );
-}
-
-class _SectionTitle extends StatelessWidget {
-  const _SectionTitle(this.title);
-  final String title;
-
-  @override
-  Widget build(BuildContext context) => Text(title, style: const TextStyle(color: _text, fontSize: 17, fontWeight: FontWeight.w700));
-}
-
-class _Picker extends StatelessWidget {
-  const _Picker({
-    required this.label,
-    required this.value,
-    required this.accent,
-    required this.onTap,
-  });
-
-  final String label, value;
-  final Color accent;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) => Material(
-        color: _surface,
-        borderRadius: BorderRadius.circular(12),
-        child: InkWell(
-          onTap: onTap,
-          borderRadius: BorderRadius.circular(12),
-          child: Padding(
-            padding: const EdgeInsets.fromLTRB(15, 11, 12, 10),
-            child: Row(
-              children: [
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(label, style: const TextStyle(color: _muted, fontSize: 13)),
-                      const SizedBox(height: 3),
-                      Text(value, style: const TextStyle(color: _text, fontSize: 14, fontWeight: FontWeight.w600)),
-                    ],
-                  ),
-                ),
-                Icon(Icons.keyboard_arrow_down_rounded, color: accent),
-              ],
-            ),
-          ),
+  Widget build(BuildContext context) => Padding(
+        padding: const EdgeInsets.only(bottom: 8),
+        child: Row(
+          children: [
+            Text(label, style: const TextStyle(color: _muted)),
+            const SizedBox(width: 12),
+            Expanded(child: Text(value, style: const TextStyle(color: _text))),
+          ],
         ),
       );
 }
@@ -1153,45 +1056,127 @@ class _Action extends StatelessWidget {
 
   final IconData icon;
   final String title;
-  final String? subtitle;
   final Color accent;
+  final String? subtitle;
   final VoidCallback? onTap;
 
   @override
   Widget build(BuildContext context) => Material(
         color: _surface,
-        borderRadius: BorderRadius.circular(15),
+        borderRadius: BorderRadius.circular(14),
         child: InkWell(
           onTap: onTap,
-          borderRadius: BorderRadius.circular(15),
+          borderRadius: BorderRadius.circular(14),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 13),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             child: Row(
               children: [
-                Icon(icon, color: accent, size: 22),
+                Icon(icon, color: accent),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
+                    mainAxisSize: MainAxisSize.min,
                     children: [
-                      Text(title, style: const TextStyle(color: _text, fontSize: 14, fontWeight: FontWeight.w600)),
+                      Text(title, style: const TextStyle(color: _text, fontWeight: FontWeight.w600)),
                       if (subtitle != null) ...[
-                        const SizedBox(height: 2),
-                        Text(
-                          subtitle!,
-                          maxLines: 1,
-                          overflow: TextOverflow.ellipsis,
-                          style: const TextStyle(color: _muted, fontSize: 12),
-                        ),
+                        const SizedBox(height: 4),
+                        Text(subtitle!, style: const TextStyle(color: _muted, fontSize: 12)),
                       ],
                     ],
                   ),
                 ),
-                const Icon(Icons.chevron_right_rounded, color: _muted, size: 22),
+                const Icon(Icons.chevron_right, color: _muted),
               ],
             ),
           ),
         ),
+      );
+}
+
+class _SectionTitle extends StatelessWidget {
+  const _SectionTitle(this.text);
+
+  final String text;
+
+  @override
+  Widget build(BuildContext context) => Text(
+        text,
+        style: const TextStyle(color: _text, fontSize: 13, fontWeight: FontWeight.w700),
+      );
+}
+
+class _Picker extends StatelessWidget {
+  const _Picker({
+    required this.label,
+    required this.value,
+    required this.accent,
+    required this.onTap,
+  });
+
+  final String label;
+  final String value;
+  final Color accent;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) => Material(
+        color: _surface,
+        borderRadius: BorderRadius.circular(14),
+        child: InkWell(
+          borderRadius: BorderRadius.circular(14),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Text(label, style: const TextStyle(color: _text, fontWeight: FontWeight.w600)),
+                ),
+                const SizedBox(width: 12),
+                Text(value, style: TextStyle(color: accent, fontWeight: FontWeight.w600)),
+                const SizedBox(width: 8),
+                const Icon(Icons.chevron_right, color: _muted),
+              ],
+            ),
+          ),
+        ),
+      );
+}
+
+class _PaletteRow extends StatelessWidget {
+  const _PaletteRow({
+    required this.selected,
+    required this.accent,
+    required this.onSelect,
+  });
+
+  final int selected;
+  final Color accent;
+  final ValueChanged<int> onSelect;
+
+  @override
+  Widget build(BuildContext context) => Row(
+        children: [
+          for (var i = 0; i < _paletteOptions.length; i++)
+            Padding(
+              padding: const EdgeInsets.only(right: 12),
+              child: GestureDetector(
+                onTap: () => onSelect(i),
+                child: Container(
+                  width: 42,
+                  height: 42,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    gradient: LinearGradient(
+                      colors: _paletteOptions[i],
+                    ),
+                    border: Border.all(color: selected == i ? accent : Colors.transparent, width: 2),
+                  ),
+                ),
+              ),
+            ),
+        ],
       );
 }
 
@@ -1213,28 +1198,33 @@ class _BottomNav extends StatelessWidget {
   @override
   Widget build(BuildContext context) => Container(
         key: navKey,
-        padding: const EdgeInsets.only(top: 7, bottom: 3),
-        decoration: const BoxDecoration(border: Border(top: BorderSide(color: Color(0xFF31212F)))),
-        child: Row(children: [
-          Expanded(
-            child: _NavItem(
-              icon: Icons.home_rounded,
-              label: _tr(english, 'Главная', 'Home'),
-              active: selected == 0,
-              accent: accent,
-              onTap: () => onSelect(0),
+        height: 58,
+        decoration: const BoxDecoration(
+          color: _surface,
+          border: Border(top: BorderSide(color: Color(0xFF1F1A28), width: 1)),
+        ),
+        child: Row(
+          children: [
+            Expanded(
+              child: _NavItem(
+                icon: Icons.home_rounded,
+                label: _tr(english, 'Главная', 'Home'),
+                active: selected == 0,
+                accent: accent,
+                onTap: () => onSelect(0),
+              ),
             ),
-          ),
-          Expanded(
-            child: _NavItem(
-              icon: Icons.person_rounded,
-              label: _tr(english, 'Профиль', 'Profile'),
-              active: selected == 1,
-              accent: accent,
-              onTap: () => onSelect(1),
+            Expanded(
+              child: _NavItem(
+                icon: Icons.person_rounded,
+                label: _tr(english, 'Профиль', 'Profile'),
+                active: selected == 1,
+                accent: accent,
+                onTap: () => onSelect(1),
+              ),
             ),
-          ),
-        ]),
+          ],
+        ),
       );
 }
 
@@ -1254,31 +1244,16 @@ class _NavItem extends StatelessWidget {
   final VoidCallback onTap;
 
   @override
-  Widget build(BuildContext context) => InkWell(
-        onTap: onTap,
-        borderRadius: BorderRadius.circular(14),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 7),
+  Widget build(BuildContext context) => Material(
+        color: Colors.transparent,
+        child: InkWell(
+          onTap: onTap,
           child: Column(
-            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, color: active ? accent : _muted, size: 25),
-              const SizedBox(height: 3),
-              Text(
-                label,
-                style: TextStyle(
-                  color: active ? accent : _muted,
-                  fontSize: 12,
-                  fontWeight: active ? FontWeight.w600 : FontWeight.w400,
-                ),
-              ),
+              Icon(icon, color: active ? accent : _muted),
               const SizedBox(height: 4),
-              AnimatedContainer(
-                duration: const Duration(milliseconds: 180),
-                width: active ? 42 : 0,
-                height: 2,
-                decoration: BoxDecoration(color: accent, borderRadius: BorderRadius.circular(2)),
-              ),
+              Text(label, style: TextStyle(color: active ? accent : _muted, fontSize: 10)),
             ],
           ),
         ),
