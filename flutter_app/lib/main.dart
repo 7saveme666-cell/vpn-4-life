@@ -928,18 +928,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const SizedBox(height: 18),
           _SectionTitle(t('Маршрутизация', 'Routing')),
           const SizedBox(height: 8),
-_Action(
-  icon: Icons.alt_route_rounded,
-  title: t('Настройки сплит-туннелирования', 'Split tunneling settings'),
-  accent: widget.accent,
-  onTap: () {
-    Navigator.of(context).push(
-      MaterialPageRoute(
-        builder: (_) => SplitTunnelScreen(accent: widget.accent),
-      ),
-    );
-  },
-),
+          _Action(
+            icon: Icons.alt_route_rounded,
+            title: t('Настройки сплит-туннелирования', 'Split tunneling settings'),
+            accent: widget.accent,
+            onTap: () {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (context) => SplitTunnelScreen(accent: widget.accent),
+                ),
+              );
+            },
+          ),
           const SizedBox(height: 18),
           _SectionTitle(t('Система', 'System')),
           const SizedBox(height: 8),
@@ -998,27 +998,17 @@ _Action(
             padding: EdgeInsets.fromLTRB(18, 18, 18, 18 + MediaQuery.viewInsetsOf(context).bottom),
             child: Column(
               mainAxisSize: MainAxisSize.min,
-              crossAxisAlignment: CrossAxisAlignment.stretch,
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
-                  t('Конфиденциальность', 'Privacy'),
-                  style: const TextStyle(color: _text, fontSize: 20, fontWeight: FontWeight.w700),
-                ),
+                Text(t('Конфиденциальность', 'Privacy'), style: const TextStyle(color: _text, fontSize: 20, fontWeight: FontWeight.w700)),
+                const SizedBox(height: 12),
+                _Action(icon: Icons.person_rounded, title: t('Изменить логин', 'Change username'), accent: widget.accent, onTap: _changeLogin),
                 const SizedBox(height: 8),
-                Text(
-                  t('Логин, пароль, Gmail и номер телефона', 'Username, password, Gmail and phone'),
-                  style: const TextStyle(color: _muted),
-                ),
-                const SizedBox(height: 18),
-                _InfoRow(label: 'Login', value: _login),
-                if (_gmail != null) _InfoRow(label: 'Gmail', value: _gmail!),
-                if (_phone != null) _InfoRow(label: 'Phone', value: _phone!),
-                const SizedBox(height: 18),
-                FilledButton(
-                  style: FilledButton.styleFrom(backgroundColor: widget.accent),
-                  onPressed: () => Navigator.pop(context),
-                  child: Text(t('Закрыть', 'Close')),
-                ),
+                _Action(icon: Icons.lock_rounded, title: t('Изменить пароль', 'Change password'), accent: widget.accent, onTap: _changePassword),
+                const SizedBox(height: 8),
+                _Action(icon: Icons.email_rounded, title: t('Привязать Gmail', 'Link Gmail'), accent: widget.accent, onTap: _bindGmail),
+                const SizedBox(height: 8),
+                _Action(icon: Icons.phone_rounded, title: t('Привязать номер телефона', 'Link phone number'), accent: widget.accent, onTap: _bindPhone),
               ],
             ),
           ),
@@ -1028,38 +1018,19 @@ _Action(
   }
 }
 
-class _InfoRow extends StatelessWidget {
-  const _InfoRow({required this.label, required this.value});
-
-  final String label;
-  final String value;
-
-  @override
-  Widget build(BuildContext context) => Padding(
-        padding: const EdgeInsets.only(bottom: 8),
-        child: Row(
-          children: [
-            Text(label, style: const TextStyle(color: _muted)),
-            const SizedBox(width: 12),
-            Expanded(child: Text(value, style: const TextStyle(color: _text))),
-          ],
-        ),
-      );
-}
-
 class _Action extends StatelessWidget {
   const _Action({
     required this.icon,
     required this.title,
-    required this.accent,
     this.subtitle,
+    required this.accent,
     this.onTap,
   });
 
   final IconData icon;
   final String title;
-  final Color accent;
   final String? subtitle;
+  final Color accent;
   final VoidCallback? onTap;
 
   @override
@@ -1073,12 +1044,11 @@ class _Action extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             child: Row(
               children: [
-                Icon(icon, color: accent),
+                Icon(icon, color: accent, size: 24),
                 const SizedBox(width: 12),
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
-                    mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(title, style: const TextStyle(color: _text, fontWeight: FontWeight.w600)),
                       if (subtitle != null) ...[
@@ -1088,23 +1058,11 @@ class _Action extends StatelessWidget {
                     ],
                   ),
                 ),
-                const Icon(Icons.chevron_right, color: _muted),
+                const Icon(Icons.chevron_right_rounded, color: _muted),
               ],
             ),
           ),
         ),
-      );
-}
-
-class _SectionTitle extends StatelessWidget {
-  const _SectionTitle(this.text);
-
-  final String text;
-
-  @override
-  Widget build(BuildContext context) => Text(
-        text,
-        style: const TextStyle(color: _text, fontSize: 13, fontWeight: FontWeight.w700),
       );
 }
 
@@ -1126,24 +1084,31 @@ class _Picker extends StatelessWidget {
         color: _surface,
         borderRadius: BorderRadius.circular(14),
         child: InkWell(
-          borderRadius: BorderRadius.circular(14),
           onTap: onTap,
+          borderRadius: BorderRadius.circular(14),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             child: Row(
               children: [
-                Expanded(
-                  child: Text(label, style: const TextStyle(color: _text, fontWeight: FontWeight.w600)),
-                ),
+                Text(label, style: const TextStyle(color: _muted, fontSize: 13)),
                 const SizedBox(width: 12),
-                Text(value, style: TextStyle(color: accent, fontWeight: FontWeight.w600)),
-                const SizedBox(width: 8),
-                const Icon(Icons.chevron_right, color: _muted),
+                Expanded(
+                  child: Text(value, style: const TextStyle(color: _text, fontWeight: FontWeight.w600)),
+                ),
+                Icon(Icons.chevron_right_rounded, color: accent),
               ],
             ),
           ),
         ),
       );
+}
+
+class _SectionTitle extends StatelessWidget {
+  const _SectionTitle(this.title);
+  final String title;
+
+  @override
+  Widget build(BuildContext context) => Text(title, style: const TextStyle(color: _muted, fontSize: 12, fontWeight: FontWeight.w700, letterSpacing: 0.7));
 }
 
 class _PaletteRow extends StatelessWidget {
@@ -1162,7 +1127,7 @@ class _PaletteRow extends StatelessWidget {
         children: [
           for (var i = 0; i < _paletteOptions.length; i++)
             Padding(
-              padding: const EdgeInsets.only(right: 12),
+              padding: const EdgeInsets.only(right: 10),
               child: GestureDetector(
                 onTap: () => onSelect(i),
                 child: Container(
@@ -1170,94 +1135,12 @@ class _PaletteRow extends StatelessWidget {
                   height: 42,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    gradient: LinearGradient(
-                      colors: _paletteOptions[i],
-                    ),
-                    border: Border.all(color: selected == i ? accent : Colors.transparent, width: 2),
+                    gradient: LinearGradient(colors: _paletteOptions[i]),
+                    border: Border.all(color: i == selected ? accent : Colors.transparent, width: 3),
                   ),
                 ),
               ),
             ),
         ],
-      );
-}
-
-class _BottomNav extends StatelessWidget {
-  const _BottomNav({
-    required this.navKey,
-    required this.selected,
-    required this.english,
-    required this.accent,
-    required this.onSelect,
-  });
-
-  final GlobalKey navKey;
-  final int selected;
-  final bool english;
-  final Color accent;
-  final ValueChanged<int> onSelect;
-
-  @override
-  Widget build(BuildContext context) => Container(
-        key: navKey,
-        height: 58,
-        decoration: const BoxDecoration(
-          color: _surface,
-          border: Border(top: BorderSide(color: Color(0xFF1F1A28), width: 1)),
-        ),
-        child: Row(
-          children: [
-            Expanded(
-              child: _NavItem(
-                icon: Icons.home_rounded,
-                label: _tr(english, 'Главная', 'Home'),
-                active: selected == 0,
-                accent: accent,
-                onTap: () => onSelect(0),
-              ),
-            ),
-            Expanded(
-              child: _NavItem(
-                icon: Icons.person_rounded,
-                label: _tr(english, 'Профиль', 'Profile'),
-                active: selected == 1,
-                accent: accent,
-                onTap: () => onSelect(1),
-              ),
-            ),
-          ],
-        ),
-      );
-}
-
-class _NavItem extends StatelessWidget {
-  const _NavItem({
-    required this.icon,
-    required this.label,
-    required this.active,
-    required this.accent,
-    required this.onTap,
-  });
-
-  final IconData icon;
-  final String label;
-  final bool active;
-  final Color accent;
-  final VoidCallback onTap;
-
-  @override
-  Widget build(BuildContext context) => Material(
-        color: Colors.transparent,
-        child: InkWell(
-          onTap: onTap,
-          child: Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(icon, color: active ? accent : _muted),
-              const SizedBox(height: 4),
-              Text(label, style: TextStyle(color: active ? accent : _muted, fontSize: 10)),
-            ],
-          ),
-        ),
       );
 }
