@@ -928,16 +928,18 @@ class _ProfileScreenState extends State<ProfileScreen> {
           const SizedBox(height: 18),
           _SectionTitle(t('Маршрутизация', 'Routing')),
           const SizedBox(height: 8),
-          _Action(
-            icon: Icons.alt_route_rounded,
-            title: t('Настройки сплит-туннелирования', 'Split tunneling settings'),
-            accent: widget.accent,
-            onTap: () {
-              Navigator.of(context).push(
-                MaterialPageRoute(builder: (_) => const SplitTunnelScreen()),
-              );
-            },
-          ),
+_Action(
+  icon: Icons.alt_route_rounded,
+  title: t('Настройки сплит-туннелирования', 'Split tunneling settings'),
+  accent: widget.accent,
+  onTap: () {
+    Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (_) => SplitTunnelScreen(accent: widget.accent),
+      ),
+    );
+  },
+),
           const SizedBox(height: 18),
           _SectionTitle(t('Система', 'System')),
           const SizedBox(height: 8),
