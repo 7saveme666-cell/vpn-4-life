@@ -1,11 +1,12 @@
 import 'package:flutter/material.dart';
 
-const _splitBg = Color(0xFF1D1D1D);
-const _splitCard = Color(0xFF303030);
+// Match the app's dark background and surface palette.
+const _splitBg = Color(0xFF05050A);
+const _splitCard = Color(0xFF100D18);
 const _splitYellow = Color(0xFFF4E51E);
 
-/// Demo split-tunneling settings UI. This screen stores changes only in memory;
-/// it does not configure a real VPN tunnel or installed applications.
+/// Demo split-tunneling settings UI. Changes are local to this screen and do
+/// not configure a real VPN tunnel or installed applications.
 class SplitTunnelScreen extends StatefulWidget {
   const SplitTunnelScreen({super.key});
 
@@ -186,7 +187,7 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
                     Container(
                       margin: const EdgeInsets.only(bottom: 8),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF242424),
+                        color: _splitCard,
                         borderRadius: BorderRadius.circular(16),
                       ),
                       child: SizedBox(
