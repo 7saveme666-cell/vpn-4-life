@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
-const _splitBg = Color(0xFF1A1A1D);
-const _splitCard = Color(0xFF2C2C2F);
-const _splitYellow = Color(0xFFE9D100);
+const _splitBg = Color(0xFF1D1D1D);
+const _splitCard = Color(0xFF303030);
+const _splitYellow = Color(0xFFF4E51E);
 
+/// Demo split-tunneling settings UI. This screen stores changes only in memory;
+/// it does not configure a real VPN tunnel or installed applications.
 class SplitTunnelScreen extends StatefulWidget {
   const SplitTunnelScreen({super.key});
 
@@ -76,7 +78,6 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
         ],
       ),
     );
-
     controller.dispose();
 
     if (value == null || value.isEmpty || !mounted) return;
@@ -98,7 +99,7 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
                 children: [
                   IconButton(
                     onPressed: () => Navigator.maybePop(context),
-                    icon: const Icon(Icons.arrow_back, color: Colors.white, size: 30),
+                    icon: const Icon(Icons.arrow_back, color: Colors.white, size: 25),
                   ),
                   const Expanded(
                     child: Text(
@@ -125,17 +126,17 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
                 ],
               ),
             ),
-            const SizedBox(height: 18),
+            const SizedBox(height: 24),
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 12),
               child: Material(
-                color: const Color(0xFF2E2E31),
-                borderRadius: BorderRadius.circular(12),
+                color: _splitCard,
+                borderRadius: BorderRadius.circular(9),
                 child: InkWell(
                   onTap: _chooseRoutingMode,
-                  borderRadius: BorderRadius.circular(12),
+                  borderRadius: BorderRadius.circular(9),
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+                    padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 13),
                     child: Row(
                       children: [
                         Expanded(
@@ -150,56 +151,66 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
                                   fontWeight: FontWeight.w500,
                                 ),
                               ),
-                              const SizedBox(height: 4),
+                              const SizedBox(height: 3),
                               Text(
                                 _routingMode,
                                 style: const TextStyle(
                                   color: Colors.white,
-                                  fontSize: 16,
+                                  fontSize: 14,
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
                             ],
                           ),
                         ),
-                        const Icon(Icons.chevron_right, color: Colors.white70),
+                        const Icon(Icons.chevron_right, color: Colors.white70, size: 25),
                       ],
                     ),
                   ),
                 ),
               ),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 7),
             Row(
               children: [
                 _tabButton('Домены', true),
                 _tabButton('Приложения', false),
               ],
             ),
-            const SizedBox(height: 12),
+            const SizedBox(height: 20),
             Expanded(
               child: ListView(
                 padding: const EdgeInsets.symmetric(horizontal: 12),
                 children: [
                   for (final entry in listItems)
                     Container(
-                      margin: const EdgeInsets.only(bottom: 10),
+                      margin: const EdgeInsets.only(bottom: 8),
                       decoration: BoxDecoration(
-                        color: const Color(0xFF2A2A2D),
-                        borderRadius: BorderRadius.circular(14),
+                        color: const Color(0xFF242424),
+                        borderRadius: BorderRadius.circular(16),
                       ),
-                      child: ListTile(
-                        title: Text(
-                          entry,
-                          style: const TextStyle(
-                            color: Colors.white,
-                            fontSize: 18,
-                            fontWeight: FontWeight.w500,
-                          ),
-                        ),
-                        trailing: IconButton(
-                          onPressed: () => setState(() => listItems.remove(entry)),
-                          icon: const Icon(Icons.delete_outline_rounded, color: Colors.white70),
+                      child: SizedBox(
+                        height: 51,
+                        child: Row(
+                          children: [
+                            const SizedBox(width: 12),
+                            Expanded(
+                              child: Text(
+                                entry,
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                            IconButton(
+                              tooltip: 'Удалить',
+                              onPressed: () => setState(() => listItems.remove(entry)),
+                              icon: const Icon(Icons.delete, color: Colors.white, size: 21),
+                            ),
+                            const SizedBox(width: 8),
+                          ],
                         ),
                       ),
                     ),
@@ -207,10 +218,10 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.fromLTRB(12, 8, 12, 12),
+              padding: const EdgeInsets.fromLTRB(12, 8, 12, 6),
               child: SizedBox(
                 width: double.infinity,
-                height: 52,
+                height: 40,
                 child: FilledButton(
                   style: FilledButton.styleFrom(
                     backgroundColor: _splitYellow,
@@ -222,10 +233,7 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
                   onPressed: _addEntry,
                   child: const Text(
                     'Добавить',
-                    style: TextStyle(
-                      fontSize: 18,
-                      fontWeight: FontWeight.w700,
-                    ),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                   ),
                 ),
               ),
@@ -245,21 +253,21 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
         child: Column(
           children: [
             SizedBox(
-              height: 42,
+              height: 47,
               child: Center(
                 child: Text(
                   title,
                   style: TextStyle(
                     color: selected ? Colors.white : Colors.white60,
                     fontSize: 16,
-                    fontWeight: selected ? FontWeight.w700 : FontWeight.w500,
+                    fontWeight: selected ? FontWeight.w600 : FontWeight.w400,
                   ),
                 ),
               ),
             ),
             Container(
               height: 3,
-              width: 120,
+              margin: const EdgeInsets.symmetric(horizontal: 16),
               decoration: BoxDecoration(
                 color: selected ? _splitYellow : Colors.transparent,
                 borderRadius: BorderRadius.circular(3),
