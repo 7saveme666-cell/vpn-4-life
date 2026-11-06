@@ -9,6 +9,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'demo_auth_gate.dart';
+import 'split_tunnel_screen.dart';
 
 const _background = Color(0xFF05050A);
 const _surface = Color(0xFF100D18);
