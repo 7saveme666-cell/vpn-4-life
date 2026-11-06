@@ -235,7 +235,7 @@ class _AppHeader extends StatelessWidget {
             icon: Icon(Icons.close_rounded, color: accent, size: 25),
           ),
           const Spacer(),
-          Icon(Icons.pets_rounded, color: accent, size: 21),
+          const Text('🕷️', style: TextStyle(fontSize: 20)),
           const SizedBox(width: 8),
           const Text('Spider VPN', style: TextStyle(color: _text, fontSize: 20, fontWeight: FontWeight.w600)),
           const Spacer(),
