@@ -22,6 +22,21 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
   final List<String> _domains = ['Российские сайты'];
   final List<String> _apps = [];
 
+  String? _countryFlagFor(String entry) {
+    final value = entry.toLowerCase();
+    if (value.contains('росси') || value.contains('russia')) return '🇷🇺';
+    if (value.contains('сша') || value.contains('америк') || value.contains('united states')) return '🇺🇸';
+    if (value.contains('герман') || value.contains('german')) return '🇩🇪';
+    if (value.contains('нидерланд') || value.contains('netherland')) return '🇳🇱';
+    if (value.contains('швед') || value.contains('swed')) return '🇸🇪';
+    if (value.contains('япон') || value.contains('japan')) return '🇯🇵';
+    if (value.contains('франц') || value.contains('france')) return '🇫🇷';
+    if (value.contains('британ') || value.contains('united kingdom') || value.contains('uk')) return '🇬🇧';
+    if (value.contains('турц') || value.contains('turkey')) return '🇹🇷';
+    if (value.contains('казах') || value.contains('kazakh')) return '🇰🇿';
+    return null;
+  }
+
   Future<void> _chooseRoutingMode() async {
     final selected = await showModalBottomSheet<String>(
       context: context,
@@ -199,6 +214,10 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
                         child: Row(
                           children: [
                             const SizedBox(width: 12),
+                            if (_domainsTab && _countryFlagFor(entry) != null) ...[
+                              Text(_countryFlagFor(entry)!, style: const TextStyle(fontSize: 18)),
+                              const SizedBox(width: 8),
+                            ],
                             Expanded(
                               child: Text(
                                 entry,
@@ -226,7 +245,7 @@ class _SplitTunnelScreenState extends State<SplitTunnelScreen> {
               padding: const EdgeInsets.fromLTRB(12, 8, 12, 6),
               child: SizedBox(
                 width: double.infinity,
-                height: 36,
+                height: 40,
                 child: FilledButton(
                   style: FilledButton.styleFrom(
                     backgroundColor: widget.accent,
