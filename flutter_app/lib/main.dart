@@ -932,7 +932,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
             icon: Icons.alt_route_rounded,
             title: t('Настройки сплит-туннелирования', 'Split tunneling settings'),
             accent: widget.accent,
-            onTap: () => _toast(t('Демо-настройка', 'Demo setting')),
+            onTap: () {
+  Navigator.of(context).push(
+    MaterialPageRoute(
+      builder: (context) => const SplitTunnelScreen(),
+    ),
+  );
+},
           ),
           const SizedBox(height: 18),
           _SectionTitle(t('Система', 'System')),
