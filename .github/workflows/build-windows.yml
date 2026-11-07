@@ -29,6 +29,10 @@ jobs:
         working-directory: flutter_app
         run: flutter create --platforms=windows .
 
+       - name: Apply custom Windows icon
+        shell: pwsh
+        run: Copy-Item "flutter_app/app_icon.ico" "flutter_app/windows/runner/resources/app_icon.ico" -Force
+
       - name: Install dependencies
         working-directory: flutter_app
         run: flutter pub get
