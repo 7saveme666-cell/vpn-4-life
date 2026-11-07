@@ -6,6 +6,7 @@ on:
     paths:
       - "flutter_app/**"
       - ".github/workflows/build-windows.yml"
+      - ".github/scripts/create_windows_icon.py"
 
 permissions:
   contents: read
@@ -29,9 +30,10 @@ jobs:
         working-directory: flutter_app
         run: flutter create --platforms=windows .
 
-       - name: Apply custom Windows icon
-        shell: pwsh
-        run: Copy-Item "flutter_app/app_icon.ico" "flutter_app/windows/runner/resources/app_icon.ico" -Force
+      - name: Generate Spider VPN Windows icon
+        run: |
+          python -m pip install --quiet Pillow
+          python .github/scripts/create_windows_icon.py
 
       - name: Install dependencies
         working-directory: flutter_app
